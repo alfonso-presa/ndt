@@ -23,7 +23,6 @@ module.exports = function () {
     });
 
     this.Then(/^testable outcome (\d+)$/, function (arg1, callback) {
-         console.log("Tested" + arg1);
          callback();
     });
 

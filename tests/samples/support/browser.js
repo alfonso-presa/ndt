@@ -6,7 +6,7 @@ module.exports = function () {
 
     var browserBootstrapPromise;
 
-    this.Given(/^I perform google navigation$/, {timeout:20000}, function () {
+    this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, function () {
         if(!browserBootstrapPromise) {
             browserBootstrapPromise = browser
                 .init()
@@ -30,7 +30,10 @@ module.exports = function () {
                 })
                 .click('#search_button')
                 .then(function () {
-                    return observe.trigger('searched google');
+                    return Promise.all(
+                        observe.trigger('searched'),
+                        observe.trigger('searched google')
+                    );
                 })
                 .end();
         }
@@ -42,7 +45,11 @@ module.exports = function () {
     });
 
     this.When(/^I search '(.*)'$/, function (keyword, callback) {
-        observe.listen('input ' + keyword, callback);
+        observe.listen('searched ' + keyword, callback);
+    });
+
+    this.When(/^I search anything$/, function (callback) {
+        observe.listen('searched', callback);
     });
 
     this.Then(/^I should see the results for (.*)$/, function (keyword, callback) {
@@ -50,6 +57,15 @@ module.exports = function () {
             return browser.getText('.zci--meanings .metabar__primary-text')
                 .should.eventually.equal('Resultados para ' + keyword)
                 .then(() => callback());
+        });
+    });
+
+    this.Then(/^I should see the search tabs$/, function (callback) {
+        observe.listen('searched', function () {
+            return browser.getText('.zcm__item')
+                .should.eventually.eql(['Web','Imágenes','Videos','Noticias'])
+                .then(() => callback())
+                .catch(callback);
         });
     });
 

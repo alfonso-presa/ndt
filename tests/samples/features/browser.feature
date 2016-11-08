@@ -3,7 +3,7 @@ Feature: browser managing
  Should allow using the browser in parallel
 
  Background:
-  Given I perform google navigation
+  Given I perform duckduckgo navigation
 
  Scenario: Search button
    Then I should see the search button
@@ -11,6 +11,11 @@ Feature: browser managing
  Scenario: Simple search
    When I search 'prueba'
    Then I should see the results for prueba
+
+ Scenario: Search tabs
+   When I search anything
+   Then I should see the search tabs
+
 
  Scenario: Simple search
    When I search 'google'
