@@ -39,9 +39,18 @@ module.exports = function () {
         });
     }
 
+    this.When(/^I'm in the wellcome screen$/, function (callback) {
+        observe.listen('home', callback);
+    });
 
     this.Then(/^I should see the search button$/, function (callback) {
-        observe.listen('home', callback);
+        observe.listen('*', function () {
+            return browser.isVisible('#search_button_homepage').then(function (visible) {
+                return visible || browser.isVisible('#search_button');
+            }).should.eventually.be.true
+            .then(() => callback())
+            .catch(callback);
+        });
     });
 
     this.When(/^I search '(.*)'$/, function (keyword, callback) {

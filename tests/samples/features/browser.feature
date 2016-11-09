@@ -6,6 +6,7 @@ Feature: browser managing
   Given I perform duckduckgo navigation
 
  Scenario: Search button
+   When I'm in the wellcome screen
    Then I should see the search button
 
  Scenario: Simple search
@@ -15,6 +16,7 @@ Feature: browser managing
  Scenario: Search tabs
    When I search anything
    Then I should see the search tabs
+   And I should see the search button
 
  Scenario: Search tabs
    When I search a company
