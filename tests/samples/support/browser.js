@@ -4,47 +4,41 @@ let observe = require('../../../lib/observable');
 
 module.exports = function () {
 
-    var browserBootstrapPromise;
+    {
+        var browserBootstrapPromise;
 
-    var log = function (data) {
-        console.log(JSON.stringify(data));
-        return data;
+        this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, function () {
+            if(!browserBootstrapPromise) {
+                browserBootstrapPromise = browser
+                    .init()
+                    .url('https://duckduckgo.com/')
+                browserBootstrapPromise
+                    .pause(50)
+                    .then(function () {
+                        return observe.trigger('home');
+                    })
+                    .setValue('#search_form_input_homepage', 'prueba')
+                    .then(function () {
+                        return observe.trigger('input prueba');
+                    })
+                    .click('#search_button_homepage')
+                    .then(function () {
+                        return observe.trigger('searched prueba');
+                    })
+                    .setValue('#search_form_input', 'google')
+                    .then(function () {
+                        return observe.trigger('input google');
+                    })
+                    .click('#search_button')
+                    .then(function () {
+                        return observe.trigger('searched','searched company','searched google')
+                    })
+                    .end();
+            }
+            return browserBootstrapPromise;
+        });
     }
 
-    this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, function () {
-        if(!browserBootstrapPromise) {
-            browserBootstrapPromise = browser
-                .init()
-                .url('https://duckduckgo.com/')
-            browserBootstrapPromise
-                .pause(50)
-                .then(function () {
-                    return observe.trigger('home');
-                })
-                .setValue('#search_form_input_homepage', 'prueba')
-                .then(function () {
-                    return observe.trigger('input prueba');
-                })
-                .click('#search_button_homepage')
-                .then(function () {
-                    return observe.trigger('searched prueba');
-                })
-                .setValue('#search_form_input', 'google')
-                .then(function () {
-                    return observe.trigger('input google');
-                })
-                .click('#search_button')
-                .then(function () {
-                    return Promise.all(
-                        observe.trigger('searched'),
-                        observe.trigger('searched company'),
-                        observe.trigger('searched google')
-                    );
-                })
-                .end();
-        }
-        return browserBootstrapPromise;
-    });
 
     this.Then(/^I should see the search button$/, function (callback) {
         observe.listen('home', callback);
@@ -97,7 +91,7 @@ module.exports = function () {
     });
 
     this.Then(/^I should see company info for (.*)$/, function (keyword, callback) {
-        observe.listen('searched ' + keyword.toLowerCase(), function () {
+        observe.listen('searched company', function () {
             console.log('testing');
             return browser.getText('.c-info__title')
                 .should.eventually.equal(keyword)

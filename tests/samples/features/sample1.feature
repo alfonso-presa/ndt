@@ -1,4 +1,4 @@
-@parallel
+@parallel @focus
 Feature: title
 
  Background:

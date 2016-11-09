@@ -1,4 +1,4 @@
-@parallel
+@parallel @focus
 Feature: browser managing
  Should allow using the browser in parallel
 

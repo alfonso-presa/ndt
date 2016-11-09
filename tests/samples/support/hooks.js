@@ -7,7 +7,7 @@ module.exports = function (){
         desiredCapabilities: {
             browserName: 'chrome',
             chromeOptions: {
-                binary: '/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary'
+                binary: /darwin/.test(process.platform) && '/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary'
             }
         }
     };
