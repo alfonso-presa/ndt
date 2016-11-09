@@ -11,6 +11,10 @@ module.exports = function () {
             if(!browserBootstrapPromise) {
                 browserBootstrapPromise = browser
                     .init()
+                    .setViewportSize({
+                        width: 900,
+                        height: 800
+                    },false)
                     .url('https://duckduckgo.com/')
                 browserBootstrapPromise
                     .pause(50)
