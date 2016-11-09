@@ -14,10 +14,11 @@ module.exports = function () {
                     .setViewportSize({
                         width: 900,
                         height: 800
-                    },false)
-                    .url('https://duckduckgo.com/')
+                    },false);
+
+                //This is the navigation. It's executed in parallel making the other steps progress
                 browserBootstrapPromise
-                    .pause() //Needed to make next step async
+                    .url('https://duckduckgo.com/')
 
                     .then(() => observe.trigger('home'))
 
