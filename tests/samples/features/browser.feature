@@ -16,6 +16,9 @@ Feature: browser managing
    When I search anything
    Then I should see the search tabs
 
+ Scenario: Search tabs
+   When I search a company
+   Then I should see 'Acerca De' in the tabs
 
  Scenario: Simple search
    When I search 'google'

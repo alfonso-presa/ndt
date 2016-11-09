@@ -6,6 +6,11 @@ module.exports = function () {
 
     var browserBootstrapPromise;
 
+    var log = function (data) {
+        console.log(JSON.stringify(data));
+        return data;
+    }
+
     this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, function () {
         if(!browserBootstrapPromise) {
             browserBootstrapPromise = browser
@@ -32,6 +37,7 @@ module.exports = function () {
                 .then(function () {
                     return Promise.all(
                         observe.trigger('searched'),
+                        observe.trigger('searched company'),
                         observe.trigger('searched google')
                     );
                 })
@@ -52,6 +58,10 @@ module.exports = function () {
         observe.listen('searched', callback);
     });
 
+    this.When(/^I search a company$/, function (callback) {
+        observe.listen('searched company', callback);
+    });
+
     this.Then(/^I should see the results for (.*)$/, function (keyword, callback) {
         observe.listen('searched ' + keyword, function () {
             return browser.getText('.zci--meanings .metabar__primary-text')
@@ -63,7 +73,16 @@ module.exports = function () {
     this.Then(/^I should see the search tabs$/, function (callback) {
         observe.listen('searched', function () {
             return browser.getText('.zcm__item')
-                .should.eventually.eql(['Web','Imágenes','Videos','Noticias'])
+                .should.eventually.include.members(['Web','Imágenes','Videos'])
+                .then(() => callback())
+                .catch(callback);
+        });
+    });
+
+    this.Then(/^I should see '(.*)' in the tabs$/, function (title, callback) {
+        observe.listen('searched', function () {
+            return browser.getText('.zcm__item')
+                .should.eventually.include(title)
                 .then(() => callback())
                 .catch(callback);
         });
@@ -80,7 +99,7 @@ module.exports = function () {
     this.Then(/^I should see company info for (.*)$/, function (keyword, callback) {
         observe.listen('searched ' + keyword.toLowerCase(), function () {
             console.log('testing');
-            return browser.getText('.js-about-module-title')
+            return browser.getText('.c-info__title')
                 .should.eventually.equal(keyword)
                 .then(() => callback())
                 .catch(callback);
