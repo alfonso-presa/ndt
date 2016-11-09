@@ -1,6 +1,6 @@
 'use strict';
 
-let observe = require('../../../lib/observable');
+let observe = new(require('../../../lib/observable'))();
 
 module.exports = function () {
 
