@@ -5,7 +5,7 @@ let observe = require('../../../lib/observable');
 module.exports = function () {
 
     {
-        var browserBootstrapPromise;
+        let browserBootstrapPromise;
 
         this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, () => {
             if(!browserBootstrapPromise) {
