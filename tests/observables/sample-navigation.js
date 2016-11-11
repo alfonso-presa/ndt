@@ -41,8 +41,8 @@ class SampleNavigation {
         return this.browserBootstrapPromise;
     }
 
-    listen (event) {
-        return this.observable.listen(event);
+    listen (event, callback) {
+        return this.observable.listen(event, callback);
     }
 }
 

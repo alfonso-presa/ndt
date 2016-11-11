@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "$(npm bin)/cucumberjs -r tests/cucumber/support -t @focus tests/cucumber && node tests/direct/tests.js"
+    "test": "$(npm bin)/cucumberjs -r tests/cucumber/support -t @focus tests/cucumber && node tests/direct/tests.js && node tests/fsm/tests.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "webdriverio": "^4.4.0"
   },
   "dependencies": {
+    "colors": "^1.1.2",
     "cucumber": "github:alfonso-presa/cucumber-js"
   }
 }
