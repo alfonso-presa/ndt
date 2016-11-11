@@ -1,6 +1,6 @@
 'use strict';
 
-let Observable = require('../../../lib/observable');
+let Observable = require('../../lib/observable');
 
 class SampleNavigation {
 

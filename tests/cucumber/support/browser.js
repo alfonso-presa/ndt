@@ -1,6 +1,6 @@
 'use strict';
 
-let navigation = new (require('../observables/sample-navigation'))();
+let navigation = new (require('../../observables/sample-navigation'))();
 
 module.exports = function () {
 
