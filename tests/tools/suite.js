@@ -29,10 +29,10 @@ module.exports = {
                 return function () {
                     console.log(('\t[' + step + ']').yellow + ' Reached');
                     if(callback) {
-                        return callback().catch((e) => {
+                        return new Promise((resolve, reject) => callback().then(resolve).catch((e) => {
                             console.error(('\t[' + step + ']').yellow + ' Failed'.red);
-                            throw e;
-                        });
+                            reject(e);
+                        }));
                     }
                 };
             }

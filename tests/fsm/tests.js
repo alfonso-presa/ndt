@@ -28,7 +28,7 @@ let testSuite = {
 
         'Search tabs for company': [
             'When I search a company',
-            'Then I should see "AcercaDe" in the tabs',
+            'Then I should see "Acerca De" in the tabs',
         ],
 
         'Company search': [
