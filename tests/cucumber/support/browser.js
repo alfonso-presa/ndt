@@ -5,7 +5,7 @@ let navigation = new (require('../../observables/sample-navigation'))();
 module.exports = function () {
 
     this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, () =>
-        navigation.start()
+        navigation.start(browser)
     );
 
     this.When(/^I'm in the wellcome screen$/, () =>

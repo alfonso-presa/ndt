@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "$(npm bin)/cucumberjs -r tests/cucumber/support -t @focus tests/cucumber"
+    "test": "$(npm bin)/cucumberjs -r tests/cucumber/support -t @focus tests/cucumber && node tests/direct/tests.js"
   },
   "author": "",
   "license": "ISC",

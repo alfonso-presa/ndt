@@ -8,7 +8,7 @@ class SampleNavigation {
         this.observable = new Observable();
     }
 
-    start() {
+    start(browser) {
         let self = this;
         if(!this.browserBootstrapPromise) {
             this.browserBootstrapPromise = browser
