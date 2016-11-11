@@ -9,11 +9,11 @@ const _ = undefined; //Undefined shortcut
 var specs = {
 
     'Should see Acerca De for company': {
-            'home':_,
-            'searched company': () =>
-                browser
-                    .getText('.zcm__item')
-                    .should.eventually.include('Acerca De')
+        'home':_,
+        'searched company': () =>
+            browser
+                .getText('.zcm__item')
+                .should.eventually.include('Acerca De')
     },
 
     'Should see results for prueba': {
