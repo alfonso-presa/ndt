@@ -1,63 +1,51 @@
 'use strict';
 
-require('colors');
+var Reporter = require('./reporter');
 
-function attachSuiteToNavigation(suite, navigation) {
+function attachSuiteToNavigation(suite, navigation, reporter) {
     let state = undefined;
 
     let stepToEvent = suite.stepDefinitions.Whens;
     let stepToAsertion = suite.stepDefinitions.Thens;
     let features = suite.features;
 
-    let reporter = {
-        step: {
-            fail: (failure, step) => setTimeout(console.error(`\t[${step}] Failed`.red)),
-            reach: (step) => console.log(`\t[${step}]` + ' Reached'.blue)
-        },
-        scenario: {
-            fail: (failure, feature, scenario) =>
-                console.error('[KO]  '.red + `${feature} => ${scenario}\n\t${failure}`),
-            success: (feature, scenario) =>
-                console.log('[OK] '.green + `${feature} => ${scenario}`),
-            missing: (feature, scenario) =>
-                console.log('[--] '.yellow + `${feature} => ${scenario}`)
-        }
-    };
-
-    function processFeatures(features, stack) {
+    function processFeatures(features, stack, reporter) {
         for(let feature in features) {
             (function (feature) {
                 let scenarios = features[feature];
-                processScenarios(feature, scenarios, stack);
+                processScenarios(feature, scenarios, stack, reporter.feature(feature));
             })(feature);
         }
     }
 
-    function processScenarios(feature, scenarios, stack) {
+    function processScenarios(feature, scenarios, stack, featureReporter) {
         for(let scenario in scenarios) {
             state = undefined;
             (function (scenario) {
                 let done = false;
                 let steps = scenarios[scenario];
+                let reporter = featureReporter.scenario(scenario);
                 steps.reduce((stack,step) =>
-                    processStep(step, stack)
+                    processStep(step, stack, reporter)
                 ,stack)
-                    .then(() => reporter.scenario.success(feature, scenario))
-                    .catch((e) => reporter.scenario.fail(e, feature, scenario))
+                    .then(reporter.success)
+                    .catch(reporter.fail)
                     .then(() => {done = true;});
-                navigation.listen('end', () => !done && reporter.scenario.missing(feature, scenario));
+                navigation.listen('end', () => !done && reporter.missing());
             })(scenario);
         }
     }
 
-    function processStep(step, stack) {
-        function visitor(step, callback) {
+    function processStep(step, stack, scenarioReporter) {
+        let reporter = scenarioReporter.step(step);
+
+        function visitor(callback) {
             return function () {
-                reporter.step.reach(step);
+                reporter.reach();
                 if(callback) {
                     return new Promise((resolve, reject) => callback().then(resolve).catch((e) => {
                         reject(e);
-                        setTimeout(() => reporter.step.fail(e, step));
+                        setTimeout(reporter.fail);
                     }));
                 }
             };
@@ -80,14 +68,14 @@ function attachSuiteToNavigation(suite, navigation) {
             return stack.then(() =>
                 navigation.listen(
                     findElement(stepToEvent, step),
-                    visitor(step)
+                    visitor()
                 )
             );
         } else if(type === 'then') {
             return stack.then(() =>
                 navigation.listen(
                     '*',
-                    visitor(step, findElement(stepToAsertion, step))
+                    visitor(findElement(stepToAsertion, step))
                 )
             );
         } else {
@@ -116,8 +104,8 @@ function attachSuiteToNavigation(suite, navigation) {
             }
         }
     }
-
-    processFeatures(features, navigation.started);
+    processFeatures(features, navigation.started, reporter);
+    return reporter;
 }
 
 class TestSuite {
@@ -126,7 +114,10 @@ class TestSuite {
     }
 
     watch (navigation) {
-        attachSuiteToNavigation(this.features, navigation);
+
+        let reporter = new Reporter();
+        attachSuiteToNavigation(this.features, navigation, reporter);
+        navigation.listen('end', reporter.printSummary.bind(reporter));
     }
 }
 

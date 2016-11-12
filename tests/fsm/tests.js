@@ -10,7 +10,10 @@ let suite = new TestSuite({
 
     features: {
         'Search engine': {
+            //Scenarios
             'Search button': [
+
+                //Steps
                 'When I\'m in the wellcome screen',
                 'Then I should see the search button'
             ],
