@@ -7,7 +7,7 @@ class Reporter {
         this._counters = {
             steps: {
                 ko: 0,
-                ok: 0
+                reached: 0
             },
             scenarios: {
                 ko: 0,
@@ -27,9 +27,9 @@ class Reporter {
 
         console.log('Navigation coverage: ' + (coverage + '%').blue);
 
-        console.log(`\n${counters.steps.ok + counters.steps.ko} steps (` +
+        console.log(`\n${counters.steps.reached} steps (` +
             `${counters.steps.ko} failed`.red + ', ' +
-            `${counters.steps.ok} passed`.green + ')\n');
+            `${counters.steps.reached - counters.steps.ko} passed`.green + ')\n');
     }
 
     feature(feature) {
@@ -56,7 +56,7 @@ class Reporter {
                                 setTimeout(console.error(`\t[${step}] Failed`.red));
                             },
                             reach: () => {
-                                counters.steps.ok++;
+                                counters.steps.reached++;
                                 console.log(`\t[${step}]` + ' Reached'.blue);
                             }
                         };
