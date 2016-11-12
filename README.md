@@ -18,3 +18,5 @@ npm install && npm test
 ```
 
 Note that if you're using MacOS you need to install chrome canary.
+
+![Image](ndt.gif?raw=true)
