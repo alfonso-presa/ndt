@@ -19,11 +19,15 @@ class Reporter {
 
     printSummary() {
         let counters = this._counters;
+        var coverage = Math.round(100 * (counters.scenarios.ok + counters.scenarios.ko) / (counters.scenarios.ok + counters.scenarios.ko + counters.scenarios.miss));
         console.log(`\n${counters.scenarios.ok + counters.scenarios.ko + counters.scenarios.miss} scenarios (` +
             `${counters.scenarios.ko} failed`.red + ', ' +
             `${counters.scenarios.miss} missing`.yellow + ', ' +
             `${counters.scenarios.ok} passed`.green + ')');
-        console.log(`${counters.steps.ok + counters.steps.ko} steps (` +
+
+        console.log('Navigation coverage: ' + (coverage + '%').blue);
+
+        console.log(`\n${counters.steps.ok + counters.steps.ko} steps (` +
             `${counters.steps.ko} failed`.red + ', ' +
             `${counters.steps.ok} passed`.green + ')\n');
     }

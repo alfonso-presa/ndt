@@ -83,4 +83,10 @@ let suite = new TestSuite({
 
 suite.watch(navigation);
 
-navigation.start(browser);
+navigation.start(browser).then(() => {
+    console.log('NAVIGATION DRIVEN TEST'.blue);
+    console.log('======================'.blue);
+    console.log('You will se steps progress while they are being reached by the navigation.');
+    console.log('Scenarios will succed when all their steps are matched and their assertions are validated.');
+    console.log('');
+});
