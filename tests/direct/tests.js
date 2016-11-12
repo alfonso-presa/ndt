@@ -1,7 +1,7 @@
 'use strict';
 
-let browser = require('../tools/browser')();
-let navigation = new (require('../observables/sample-navigation'))();
+let browser = require('../../lib/tools/browser')();
+let navigation = require('../observables/sample-navigation')();
 
 var nProcess = navigation.start(browser);
 

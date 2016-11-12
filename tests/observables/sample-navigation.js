@@ -1,55 +1,58 @@
 'use strict';
 
-let Observable = require('../../lib/observable');
+let Navigation = require('../../lib/tools/navigation');
 
-class SampleNavigation {
+module.exports = function () {
 
-    constructor() {
-        let self = this;
-        this.observable = new Observable();
-        this.started = new Promise((resolve) => {
-            this._resolveStarted = resolve;
-        })
-    }
+    let page;
 
-    start(browser) {
-        let self = this;
-        if(!this.browserBootstrapPromise) {
-            this.browserBootstrapPromise = browser
-                .init()
-                .setViewportSize({
-                    width: 900,
-                    height: 800
-                },false)
-                .then(this._resolveStarted);
+    let walkThrough = [
+        'Init',
+        'Search hola',
+        'Switch to images tab',
+        'Search prueba',
+        'Switch to web tab',
+        'Search company google',
+        'Search prueba'
+    ];
 
-            //This is the navigation. It's executed in parallel making the other steps progress
-            this.browserBootstrapPromise
-                .url('https://duckduckgo.com/')
+    let actions = {
 
-                .then(() => self.observable.trigger('home'))
+        _genericSearch: (browser, navigator, text) => browser
+            .setValue('.js-search-input', text)
+            .click('.search__button')
+            .then(() => {
+                if(page === 'home') {
+                    page = 'web';
+                    return navigator.observable.removeStatus('home').then(()=>
+                        navigator.observable.addStatus(page)
+                    );
+                }
+            }),
 
-                .setValue('#search_form_input_homepage', 'prueba')
-                .then(() => self.observable.trigger('input prueba'))
+        'Init': (browser, navigator) => browser
+            .url('https://duckduckgo.com/')
+            .then(() => navigator.observable.trigger('home', 'navigate'))
+            .then(() => {
+                page = 'home';
+                return navigator.observable.addStatus('home');
+            }),
 
-                .click('#search_button_homepage')
-                .then(() => self.observable.trigger('searched prueba'))
+        'Search company (.*)': (browser, navigator, text) =>
+            actions._genericSearch(browser, navigator, text)
+                .then(() => navigator.observable.trigger('searched', 'searched company', 'searched ' + text, 'navigate')),
 
-                .setValue('#search_form_input', 'google')
-                .then(() => self.observable.trigger('input google'))
+        'Search (.*)': (browser, navigator, text) =>
+            actions._genericSearch(browser, navigator, text)
+                .then(() => navigator.observable.trigger('searched','searched ' + text, 'navigate')),
 
-                .click('#search_button')
-                .then(() => self.observable.trigger('searched','searched company','searched google'))
+        'Switch to (.*) tab': (browser, navigator, tab) => browser
+            .then(() => navigator.observable.trigger('changed to ' + tab, 'navigate'))
+            .then(() => navigator.observable.removeStatus(page))
+            .then(() => page = tab)
+            .then(() => navigator.observable.addStatus(tab))
 
-                .then(() => self.observable.trigger('end'))
-                .end();
-        }
-        return this.browserBootstrapPromise;
-    }
+    };
 
-    listen (event, callback) {
-        return this.observable.listen(event, callback);
-    }
+    return new Navigation(walkThrough, actions);
 }
-
-module.exports = SampleNavigation;

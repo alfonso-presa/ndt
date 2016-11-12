@@ -1,8 +1,10 @@
 'use strict';
 
-let navigation = new (require('../../observables/sample-navigation'))();
+let navigation = require('../../observables/sample-navigation')();
 
 module.exports = function () {
+
+    this.setDefaultTimeout(60 * 1000);
 
     this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, () =>
         navigation.start(browser)
