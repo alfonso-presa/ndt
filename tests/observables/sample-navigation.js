@@ -5,7 +5,11 @@ let Observable = require('../../lib/observable');
 class SampleNavigation {
 
     constructor() {
+        let self = this;
         this.observable = new Observable();
+        this.started = new Promise((resolve) => {
+            this._resolveStarted = resolve;
+        })
     }
 
     start(browser) {
@@ -16,7 +20,8 @@ class SampleNavigation {
                 .setViewportSize({
                     width: 900,
                     height: 800
-                },false);
+                },false)
+                .then(this._resolveStarted);
 
             //This is the navigation. It's executed in parallel making the other steps progress
             this.browserBootstrapPromise
@@ -36,6 +41,7 @@ class SampleNavigation {
                 .click('#search_button')
                 .then(() => self.observable.trigger('searched','searched company','searched google'))
 
+                .then(() => self.observable.trigger('end'))
                 .end();
         }
         return this.browserBootstrapPromise;
