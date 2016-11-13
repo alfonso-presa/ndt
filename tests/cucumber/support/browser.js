@@ -2,6 +2,8 @@
 
 let navigation = require('../../observables/sample-navigation')();
 
+let observable = navigation.observable;
+
 module.exports = function () {
 
     this.setDefaultTimeout(10 * 1000);
@@ -11,11 +13,11 @@ module.exports = function () {
     );
 
     this.When(/^I'm in the wellcome screen$/, () =>
-        navigation.while('page','home')
+        observable.while('page','home')
     );
 
     this.Then(/^I should see the search button$/, () =>
-        navigation.listen('*', () =>
+        observable.listen('*', () =>
             browser.isVisible('#search_button_homepage').then((visible) =>
                 visible || browser.isVisible('#search_button')
             ).should.eventually.be.true
@@ -23,43 +25,43 @@ module.exports = function () {
     )
 
     this.When(/^I search anything$/, () =>
-        navigation.listen('searched')
+        observable.listen('searched')
     );
 
     this.When(/^I search a (.*)$/, (type) =>
-        navigation.listen(type + ' search')
+        observable.listen(type + ' search')
     );
 
     this.Then(/^I should see the corresponding results$/, () =>
-        navigation.listen('searched', (context) =>
+        observable.listen('searched', (context) =>
             browser.getText('.zci--meanings .metabar__primary-text')
                 .should.eventually.equal('Resultados para ' + context.text)
         )
     )
 
     this.Then(/^I should see the search tabs$/, () =>
-        navigation.listen('searched', () =>
+        observable.listen('searched', () =>
             browser.getText('.zcm__item')
                 .should.eventually.include.members(['Web','Imágenes','Videos'])
         )
     );
 
     this.Then(/^I should see '(.*)' in the tabs$/, (title) =>
-        navigation.listen('searched', () =>
+        observable.listen('searched', () =>
             browser.getText('.zcm__item')
                 .should.eventually.include(title)
         )
     );
 
     this.Then(/^I should not see the text results$/, () =>
-        navigation.listen('searched', () =>
+        observable.listen('searched', () =>
             browser.isVisible('.zci--meanings .metabar__primary-text')
                 .should.eventually.be.false
         )
     );
 
     this.Then(/^I should see company info$/, () =>
-        navigation.listen('company search', (context) =>
+        observable.listen('company search', (context) =>
             browser.getText('.c-info__title')
                 .then((text) => text.toLowerCase())
                 .should.eventually.equal(context.text)

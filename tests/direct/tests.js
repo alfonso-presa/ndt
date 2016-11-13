@@ -4,10 +4,11 @@ let browser = require('../../lib/tools/browser')();
 let navigation = require('../observables/sample-navigation')();
 
 var nProcess = navigation.start(browser);
+var observable = navigation.observable;
 
 nProcess
-    .then(() => navigation.while('page','home'))
-    .then(() => navigation.listen('company search', () =>
+    .then(() => observable.while('page','home'))
+    .then(() => observable.listen('company search', () =>
         browser
             .getText('.zcm__item')
             .should.eventually.include('Acerca De')
@@ -16,7 +17,7 @@ nProcess
     .catch((e) => console.error(e))
 
 nProcess
-    .then(() => navigation.listen('word search', (context) =>
+    .then(() => observable.listen('word search', (context) =>
         browser
             .getText('.zci--meanings .metabar__primary-text')
             .should.eventually.equal('Resultados para ' + context.text)
@@ -25,8 +26,8 @@ nProcess
     .catch((e) => console.error(e))
 
 nProcess
-    .then(() => navigation.while('page','home'))
-    .then(() => navigation.listen('*', () =>
+    .then(() => observable.while('page','home'))
+    .then(() => observable.listen('*', () =>
         browser.isVisible('#search_button_homepage').then((visible) =>
             visible || browser.isVisible('#search_button')
         ).should.eventually.be.true

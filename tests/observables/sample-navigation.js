@@ -13,7 +13,6 @@ module.exports = function () {
         'Search word prueba',
         'Switch to web tab',
         'Search word prueba',
-        'Search company google',
         'Search company pepito'
     ];
 
