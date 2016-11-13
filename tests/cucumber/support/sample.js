@@ -27,15 +27,15 @@ module.exports = function () {
     });
 
     this.When(/^action (\d+)$/, function (arg1, callback) {
-         observe.listen('action ' + arg1, callback);
+         observe.listen('action ' + arg1, () => callback());
     });
 
     this.When(/^action$/, function (callback) {
-         observe.listen('action', callback);
+         observe.listen('action', () => callback());
     });
 
     this.Given(/^precondition$/, function (callback) {
-         observe.listen('precondition', callback);
+         observe.listen('precondition', () => callback());
     });
 
 }

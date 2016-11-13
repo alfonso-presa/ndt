@@ -27,16 +27,18 @@ module.exports = function () {
         'Search (.*) (.*)': (browser, navigator, type, text) => browser
             .setValue('.js-search-input', text)
             .click('.search__button')
+            .then(() => navigator.observable.setStatus('text',text))
+            .then(() => navigator.observable.setStatus('type',type))
             .then(() => {
                 if(navigator.observable.getStatus('page') === 'home') {
                     return navigator.observable.setStatus('page', 'web');
                 }
             })
-            .then(() => navigator.observable.trigger('searched', type + ' search', 'navigate', {type: type, text:text})),
+            .then(() => navigator.observable.trigger('searched', type + ' search', 'navigate')),
 
         'Switch to (.*) tab': (browser, navigator, tab) => browser
             .then(() => navigator.observable.setStatus('page', tab))
-            .then(() => navigator.observable.trigger('navigate', {tab: tab}))
+            .then(() => navigator.observable.trigger('navigate'))
 
     };
 
