@@ -4,31 +4,23 @@ let Navigation = require('../../lib/tools/navigation');
 
 module.exports = function () {
 
+    //TODO: There should be a better way to keep state....
     let page;
 
     let walkThrough = [
         'Init',
-        'Search hola',
+        'Search word ejemplo',
         'Switch to images tab',
-        'Search prueba',
+        'Search word pepito',
+        'Switch to video tab',
+        'Search word prueba',
         'Switch to web tab',
+        'Search word prueba',
         'Search company google',
-        'Search prueba'
+        'Search company pepito'
     ];
 
     let actions = {
-
-        _genericSearch: (browser, navigator, text) => browser
-            .setValue('.js-search-input', text)
-            .click('.search__button')
-            .then(() => {
-                if(page === 'home') {
-                    page = 'web';
-                    return navigator.observable.removeStatus('home').then(()=>
-                        navigator.observable.addStatus(page)
-                    );
-                }
-            }),
 
         'Init': (browser, navigator) => browser
             .url('https://duckduckgo.com/')
@@ -38,13 +30,18 @@ module.exports = function () {
                 return navigator.observable.addStatus('home');
             }),
 
-        'Search company (.*)': (browser, navigator, text) =>
-            actions._genericSearch(browser, navigator, text)
-                .then(() => navigator.observable.trigger('searched', 'searched ' + text, 'company search', 'navigate', {text:text})),
-
-        'Search (.*)': (browser, navigator, text) =>
-            actions._genericSearch(browser, navigator, text)
-                .then(() => navigator.observable.trigger('searched', 'searched ' + text,'navigate', {text:text})),
+        'Search (.*) (.*)': (browser, navigator, type, text) => browser
+            .setValue('.js-search-input', text)
+            .click('.search__button')
+            .then(() => {
+                if(page === 'home') {
+                    page = 'web';
+                    return navigator.observable.removeStatus('home').then(()=>
+                        navigator.observable.addStatus(page)
+                    );
+                }
+            })
+            .then(() => navigator.observable.trigger('searched', type + ' search', 'navigate', {type: type, text:text})),
 
         'Switch to (.*) tab': (browser, navigator, tab) => browser
             .then(() => navigator.observable.trigger('changed to ' + tab, 'navigate', {tab: tab}))

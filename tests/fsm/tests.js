@@ -20,7 +20,7 @@ let suite = new TestSuite({
 
             'Simple search': [
                 'Given I\'m in the web tab',
-                'When I search prueba',
+                'When I search a word',
                 'Then I should see the corresponding results',
             ],
 
@@ -54,9 +54,8 @@ let suite = new TestSuite({
         Whens: {
             'I\'m in the wellcome screen': 'home',
             'I\'m in any page': 'navigate',
-            'I search a company': 'company search',
+            'I search a (.*)': '$1 search',
             'I search anything': 'searched',
-            'I search prueba': 'searched prueba'
         },
 
         //Map steps with assertions
