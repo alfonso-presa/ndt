@@ -11,7 +11,7 @@ Feature: browser managing
 
  Scenario: Simple search
    When I search 'prueba'
-   Then I should see the results for prueba
+   Then I should see the corresponding results
 
  Scenario: Search tabs
    When I search anything
@@ -23,6 +23,6 @@ Feature: browser managing
    Then I should see 'Acerca De' in the tabs
 
  Scenario: Simple search
-   When I search 'google'
-   Then I should not see the text results for google
-   Then I should see company info for Google
+   When I search a company
+   Then I should not see the text results
+   Then I should see company info

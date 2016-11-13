@@ -40,14 +40,14 @@ module.exports = function () {
 
         'Search company (.*)': (browser, navigator, text) =>
             actions._genericSearch(browser, navigator, text)
-                .then(() => navigator.observable.trigger('searched', 'searched company', 'searched ' + text, 'navigate')),
+                .then(() => navigator.observable.trigger('searched', 'searched ' + text, 'company search', 'navigate', {text:text})),
 
         'Search (.*)': (browser, navigator, text) =>
             actions._genericSearch(browser, navigator, text)
-                .then(() => navigator.observable.trigger('searched','searched ' + text, 'navigate')),
+                .then(() => navigator.observable.trigger('searched', 'searched ' + text,'navigate', {text:text})),
 
         'Switch to (.*) tab': (browser, navigator, tab) => browser
-            .then(() => navigator.observable.trigger('changed to ' + tab, 'navigate'))
+            .then(() => navigator.observable.trigger('changed to ' + tab, 'navigate', {tab: tab}))
             .then(() => navigator.observable.removeStatus(page))
             .then(() => page = tab)
             .then(() => navigator.observable.addStatus(tab))

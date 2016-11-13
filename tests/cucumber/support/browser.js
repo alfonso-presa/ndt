@@ -4,7 +4,7 @@ let navigation = require('../../observables/sample-navigation')();
 
 module.exports = function () {
 
-    this.setDefaultTimeout(60 * 1000);
+    this.setDefaultTimeout(10 * 1000);
 
     this.Given(/^I perform duckduckgo navigation$/, {timeout:20000}, () =>
         navigation.start(browser)
@@ -31,13 +31,13 @@ module.exports = function () {
     );
 
     this.When(/^I search a company$/, () =>
-        navigation.listen('searched company')
+        navigation.listen('company search')
     );
 
-    this.Then(/^I should see the results for (.*)$/, (keyword) =>
-        navigation.listen('searched ' + keyword, () =>
+    this.Then(/^I should see the corresponding results$/, () =>
+        navigation.listen('searched', (context) =>
             browser.getText('.zci--meanings .metabar__primary-text')
-                .should.eventually.equal('Resultados para ' + keyword)
+                .should.eventually.equal('Resultados para ' + context.text)
         )
     )
 
@@ -55,17 +55,18 @@ module.exports = function () {
         )
     );
 
-    this.Then(/^I should not see the text results for (.*)$/, (keyword) =>
-        navigation.listen('searched ' + keyword, () =>
+    this.Then(/^I should not see the text results$/, () =>
+        navigation.listen('searched', () =>
             browser.isVisible('.zci--meanings .metabar__primary-text')
                 .should.eventually.be.false
         )
     );
 
-    this.Then(/^I should see company info for (.*)$/, (keyword) =>
-        navigation.listen('searched company', () =>
+    this.Then(/^I should see company info$/, () =>
+        navigation.listen('company search', (context) =>
             browser.getText('.c-info__title')
-                .should.eventually.equal(keyword)
+                .then((text) => text.toLowerCase())
+                .should.eventually.equal(context.text)
         )
     );
 

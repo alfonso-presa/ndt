@@ -20,8 +20,8 @@ let suite = new TestSuite({
 
             'Simple search': [
                 'Given I\'m in the web tab',
-                'When I search "prueba"',
-                'Then I should see the results for prueba',
+                'When I search prueba',
+                'Then I should see the corresponding results',
             ],
 
             'Search tabs': [
@@ -36,9 +36,9 @@ let suite = new TestSuite({
 
             'Company search': [
                 'Given I\'m in the web tab',
-                'When I search "google"',
-                'Then I should not see the text results for Google',
-                'And I should see company info for Google',
+                'When I search a company',
+                'Then I should not see the text results',
+                'And I should see company info',
             ]
         }
     },
@@ -54,22 +54,22 @@ let suite = new TestSuite({
         Whens: {
             'I\'m in the wellcome screen': 'home',
             'I\'m in any page': 'navigate',
-            'I search "(.*)"': 'searched $1',
-            'I search a company': 'searched company',
-            'I search anything': 'searched'
+            'I search a company': 'company search',
+            'I search anything': 'searched',
+            'I search prueba': 'searched prueba'
         },
 
         //Map steps with assertions
         Thens: {
 
-            'I should see the search button': () =>
+            'I should see the search button': (context) =>
                 browser.isVisible('#search_button_homepage').then((visible) =>
                     visible || browser.isVisible('#search_button')
                 ).should.eventually.be.true,
 
-            'I should see the results for (.*)': (keyword) =>
+            'I should see the corresponding results': (context) =>
                 browser.getText('.zci--meanings .metabar__primary-text')
-                    .should.eventually.equal('Resultados para ' + keyword),
+                    .should.eventually.equal('Resultados para ' + context.text),
 
             'I should see the search tabs': () =>
                 browser.getText('.zcm__item')
@@ -79,25 +79,26 @@ let suite = new TestSuite({
                 browser.getText('.zcm__item')
                     .should.eventually.include(title),
 
-            'I should not see the text results for (.*)': (keyword) =>
+            'I should not see the text results': () =>
                 browser.isVisible('.zci--meanings .metabar__primary-text')
                     .should.eventually.be.false,
 
-            'I should see company info for (.*)': (company) =>
+            'I should see company info': (context) =>
                 browser.getText('.c-info__title')
-                    .should.eventually.equal(company),
+                    .then((text) => text.toLowerCase())
+                    .should.eventually.equal(context.text),
 
         }
     }
 
 });
 
-suite.watch(navigation);
-
-navigation.start(browser);
-
 console.log('NAVIGATION DRIVEN TEST'.blue);
 console.log('======================'.blue);
 console.log('You will se steps progress while they are being reached by the navigation.');
 console.log('Scenarios will succed when all their steps are matched and their assertions are validated.');
 console.log('');
+
+suite.watch(navigation);
+
+navigation.start(browser);

@@ -7,7 +7,7 @@ var nProcess = navigation.start(browser);
 
 nProcess
     .then(() => navigation.listen('home'))
-    .then(() => navigation.listen('searched company', () =>
+    .then(() => navigation.listen('company search', () =>
         browser
             .getText('.zcm__item')
             .should.eventually.include('Acerca De')
