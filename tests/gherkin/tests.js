@@ -61,7 +61,7 @@ console.log('You will se steps progress while they are being reached by the navi
 console.log('Scenarios will succed when all their steps are matched and their assertions are validated.');
 console.log('');
 
-suite.watch(navigation.observable, navigation.started);
+navigation.started.then((observable) => suite.watch(observable));
 
 navigation.start(browser);
 
