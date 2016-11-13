@@ -4,17 +4,19 @@ let Navigation = require('../../lib/navigation');
 
 module.exports = function () {
 
-    let walkThrough = [
-        'Init',
-        'Search word ejemplo',
-        'Switch to images tab',
-        'Search word pepito',
-        'Switch to video tab',
-        'Search word prueba',
-        'Switch to web tab',
-        'Search word prueba',
-        'Search company pepito'
-    ];
+    let walkThrough =
+        `
+            Init
+            Search word ejemplo
+            Switch to images tab
+            Search word pepito
+            Switch to video tab
+            Search word prueba
+            Switch to web tab
+            Search word prueba
+            Search company pepito
+
+        `;
 
     let actions = {
 
