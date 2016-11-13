@@ -1,6 +1,6 @@
 'use strict';
 
-let Navigation = require('../../lib/tools/navigation');
+let Navigation = require('../../lib/navigation');
 
 module.exports = function () {
 

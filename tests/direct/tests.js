@@ -1,6 +1,6 @@
 'use strict';
 
-let browser = require('../../lib/tools/browser')();
+let browser = require('../../lib/browser')();
 let navigation = require('../observables/sample-navigation')();
 
 var nProcess = navigation.start(browser);

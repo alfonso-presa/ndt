@@ -2,6 +2,6 @@
 
 module.exports = function (){
 
-    global.browser = require('../../../lib/tools/browser.js')();
+    global.browser = require('../../../lib/browser.js')();
 
 };

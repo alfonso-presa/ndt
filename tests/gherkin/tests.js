@@ -2,9 +2,9 @@
 
 require('colors');
 
-let browser = require('../../lib/tools/browser')();
+let browser = require('../../lib/browser')();
 let navigation = require('../observables/sample-navigation')();
-let TestSuite = require('../../lib/tools/suite');
+let TestSuite = require('../../lib/suite');
 
 let suite = new TestSuite(__dirname + '/sample.feature', {
 
@@ -62,6 +62,4 @@ console.log('Scenarios will succed when all their steps are matched and their as
 console.log('');
 
 navigation.started.then((observable) => suite.watch(observable));
-
 navigation.start(browser);
-
