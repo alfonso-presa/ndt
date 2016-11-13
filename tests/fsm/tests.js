@@ -47,7 +47,9 @@ let suite = new TestSuite({
 
         //Map steps with states
         Givens: {
-            'I\'m in the web tab': 'web'
+            'I\'m in the web tab': {
+                page: 'web'
+            }
         },
 
         //Map steps with events

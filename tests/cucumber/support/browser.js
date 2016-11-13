@@ -11,7 +11,7 @@ module.exports = function () {
     );
 
     this.When(/^I'm in the wellcome screen$/, () =>
-        navigation.listen('home')
+        navigation.while('page','home')
     );
 
     this.Then(/^I should see the search button$/, () =>

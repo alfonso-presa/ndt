@@ -6,7 +6,7 @@ let navigation = require('../observables/sample-navigation')();
 var nProcess = navigation.start(browser);
 
 nProcess
-    .then(() => navigation.listen('home'))
+    .then(() => navigation.while('page','home'))
     .then(() => navigation.listen('company search', () =>
         browser
             .getText('.zcm__item')
@@ -16,7 +16,6 @@ nProcess
     .catch((e) => console.error(e))
 
 nProcess
-    .then(() => navigation.listen('home'))
     .then(() => navigation.listen('word search', (context) =>
         browser
             .getText('.zci--meanings .metabar__primary-text')
@@ -26,7 +25,8 @@ nProcess
     .catch((e) => console.error(e))
 
 nProcess
-    .then(() => navigation.listen('home', () =>
+    .then(() => navigation.while('page','home'))
+    .then(() => navigation.listen('*', () =>
         browser.isVisible('#search_button_homepage').then((visible) =>
             visible || browser.isVisible('#search_button')
         ).should.eventually.be.true
