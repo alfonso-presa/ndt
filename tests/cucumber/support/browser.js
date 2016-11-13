@@ -22,16 +22,12 @@ module.exports = function () {
         )
     )
 
-    this.When(/^I search '(.*)'$/, (keyword) =>
-        navigation.listen('searched ' + keyword)
-    );
-
     this.When(/^I search anything$/, () =>
         navigation.listen('searched')
     );
 
-    this.When(/^I search a company$/, () =>
-        navigation.listen('company search')
+    this.When(/^I search a (.*)$/, (type) =>
+        navigation.listen(type + ' search')
     );
 
     this.Then(/^I should see the corresponding results$/, () =>

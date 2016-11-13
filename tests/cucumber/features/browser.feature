@@ -10,7 +10,7 @@ Feature: browser managing
    Then I should see the search button
 
  Scenario: Simple search
-   When I search 'prueba'
+   When I search a word
    Then I should see the corresponding results
 
  Scenario: Search tabs

@@ -17,12 +17,12 @@ nProcess
 
 nProcess
     .then(() => navigation.listen('home'))
-    .then(() => navigation.listen('searched prueba', () =>
+    .then(() => navigation.listen('word search', (context) =>
         browser
             .getText('.zci--meanings .metabar__primary-text')
-            .should.eventually.equal('Resultados para prueba')
+            .should.eventually.equal('Resultados para ' + context.text)
     ))
-    .then(() => console.log('[OK] Should see results for prueba'))
+    .then(() => console.log('[OK] Should see results for word'))
     .catch((e) => console.error(e))
 
 nProcess
